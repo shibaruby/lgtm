@@ -5,4 +5,4 @@ Shiba Ruby LGTM
 * [Instagram @shibadogruby](https://www.instagram.com/shibadogruby/)
 * [YouTube](https://www.youtube.com/channel/UCS8lXykq5wy7UptZfriXizw)
 
-https://shibaruby.github.io/lgtm/
+All LGTMs are listed on https://shibaruby.github.io/lgtm/ .

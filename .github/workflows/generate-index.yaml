@@ -1,0 +1,80 @@
+name: generate index
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '!*'
+    paths:
+      - '*'
+      - '!docs/index.html'
+      # TODO: Replace paths option
+      # - 'docs/lgtm/*'
+
+jobs:
+  build:
+    name: generate index.html
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: generate index
+        shell: bash
+        run: .github/workflows/generate-index/generate-index.sh
+
+      - name: upload index.html
+        uses: actions/upload-artifact@v1
+        with:
+          name: index
+          path: docs/index.html
+
+  deploy:
+    name: deploy index.html
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: download index.html
+        uses: actions/download-artifact@v1
+        with:
+          name: index
+          path: docs
+
+      - name: configure ssh
+        shell: bash
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
+          echo "${DEPLOY_KEY}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+
+      - name: configure git
+        shell: bash
+        run: |
+          git config user.name $(git log -1 --pretty=format:"%cn")
+          git config user.email $(git log -1 --pretty=format:"%ce")
+          git remote rm origin
+          git remote add origin git@github.com:${GITHUB_REPOSITORY}.git
+
+      - name: git push
+        shell: bash
+        run: |
+          branch=${GITHUB_REF#refs/heads/}
+          git checkout -b $branch
+          git add docs/index.html
+          git commit -m ":bookmark_tabs: Automated index generation at $(date --iso-8601=seconds)"
+          git push -u origin $branch
+
+

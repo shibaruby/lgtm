@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: generate index.html
+    name: generate index.html and index.json
     runs-on: ubuntu-latest
     steps:
 
@@ -19,18 +19,22 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: generate index
+      - name: generate index.html
         shell: bash
-        run: .github/workflows/generate-index/generate-index.sh
+        run: .github/workflows/generate-index/generate-html.sh
 
-      - name: upload index.html
+      - name: generate index.json
+        shell: bash
+        run: .github/workflows/generate-index/generate-json.sh
+
+      - name: upload generated files
         uses: actions/upload-artifact@v1
         with:
           name: index
-          path: docs/index.html
+          path: tmp/build/
 
   deploy:
-    name: deploy index.html
+    name: deploy index.html and index.json
     needs: build
     runs-on: ubuntu-latest
     steps:

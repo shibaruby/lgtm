@@ -6,10 +6,7 @@ on:
     tags:
       - '!*'
     paths:
-      - '*'
-      - '!docs/index.html'
-      # TODO: Replace paths option
-      # - 'docs/lgtm/*'
+      - 'docs/lgtm/*'
 
 jobs:
   build:

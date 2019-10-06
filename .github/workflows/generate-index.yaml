@@ -46,30 +46,8 @@ jobs:
           name: index
           path: docs
 
-      - name: configure ssh
+      - name: git push
         shell: bash
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
-          echo "${DEPLOY_KEY}" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-
-      - name: configure git
-        shell: bash
-        run: |
-          git config user.name $(git log -1 --pretty=format:"%cn")
-          git config user.email $(git log -1 --pretty=format:"%ce")
-          git remote rm origin
-          git remote add origin git@github.com:${GITHUB_REPOSITORY}.git
-
-      - name: git push
-        shell: bash
-        run: |
-          branch=${GITHUB_REF#refs/heads/}
-          git checkout -b $branch
-          git add docs/index.html
-          git commit -m ":bookmark_tabs: Automated index generation at $(date --iso-8601=seconds)"
-          git push -u origin $branch
+        run: .github/workflows/generate-index/git-push.sh

@@ -3,9 +3,11 @@
 set -eu
 
 base="https://shibaruby.github.io/lgtm/lgtm/"
-output="docs/index.json"
+output="tmp/build/index.json"
 
 lgtms=$(ls -t docs/lgtm/)
+
+mkdir -p tmp/build
 
 echo -n '[' > $output
 

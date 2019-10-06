@@ -2,9 +2,13 @@
 
 set -eu
 
+output="tmp/build/index.html"
+
 lgtms=$(ls -t docs/lgtm/)
 
-cat <<HTML > docs/index.html
+mkdir -p tmp/build
+
+cat <<HTML > $output
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,12 +20,12 @@ cat <<HTML > docs/index.html
 HTML
 
 for lgtm in $lgtms; do
-  cat <<HTML >> docs/index.html
+  cat <<HTML >> $output
     <li><a href="./lgtm/$lgtm">lgtm/$lgtm</a></li>
 HTML
 done
 
-cat <<HTML >> docs/index.html
+cat <<HTML >> $output
   </ul>
 </body>
 </html>

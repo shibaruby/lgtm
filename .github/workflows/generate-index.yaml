@@ -27,17 +27,11 @@ jobs:
         shell: bash
         run: .github/workflows/generate-index/generate-json.sh
 
-      - name: upload index.html
+      - name: upload generated files
         uses: actions/upload-artifact@v1
         with:
           name: index
-          path: docs/index.html
-
-      - name: upload index.json
-        uses: actions/upload-artifact@v1
-        with:
-          name: json
-          path: docs/index.json
+          path: tmp/build/
 
   deploy:
     name: deploy index.html and index.json
@@ -54,12 +48,6 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: index
-          path: docs
-
-      - name: download index.json
-        uses: actions/download-artifact@v1
-        with:
-          name: json
           path: docs
 
       - name: git push

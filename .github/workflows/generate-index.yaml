@@ -21,7 +21,7 @@ jobs:
 
       - name: generate index.html
         shell: bash
-        run: .github/workflows/generate-index/generate-index.sh
+        run: .github/workflows/generate-index/generate-html.sh
 
       - name: generate index.json
         shell: bash

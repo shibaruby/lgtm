@@ -19,15 +19,25 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: generate index
+      - name: generate index.html
         shell: bash
         run: .github/workflows/generate-index/generate-index.sh
+
+      - name: generate index.json
+        shell: bash
+        run: .github/workflows/generate-index/generate-json.sh
 
       - name: upload index.html
         uses: actions/upload-artifact@v1
         with:
           name: index
           path: docs/index.html
+
+      - name: upload index.json
+        uses: actions/upload-artifact@v1
+        with:
+          name: json
+          path: docs/index.json
 
   deploy:
     name: deploy index.html
@@ -44,6 +54,12 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: index
+          path: docs
+
+      - name: download index.json
+        uses: actions/download-artifact@v1
+        with:
+          name: json
           path: docs
 
       - name: git push

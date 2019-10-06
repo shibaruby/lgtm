@@ -25,5 +25,6 @@ git remote add origin git@github.com:${GITHUB_REPOSITORY}.git
 branch=${GITHUB_REF#refs/heads/}
 git checkout -b $branch
 git add docs/index.html
+git add docs/index.json
 git commit -m ":bookmark_tabs: Automated index generation at $(date --iso-8601=seconds)"
 git push -u origin $branch

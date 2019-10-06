@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: generate index.html
+    name: generate index.html and index.json
     runs-on: ubuntu-latest
     steps:
 
@@ -40,7 +40,7 @@ jobs:
           path: docs/index.json
 
   deploy:
-    name: deploy index.html
+    name: deploy index.html and index.json
     needs: build
     runs-on: ubuntu-latest
     steps:
